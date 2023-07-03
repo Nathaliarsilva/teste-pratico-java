@@ -1,0 +1,193 @@
+swagger: '2.0'
+info:
+  description: Practical Test NAVA
+  version: '1.0'
+  title: Spring Boot REST API
+  contact: {}
+host: localhost:8080
+basePath: /
+tags:
+  - name: customer-controller
+    description: Customer Controller
+paths:
+  /customers:
+    get:
+      tags:
+        - customer-controller
+      summary: Get all customers with pagination
+      operationId: findAllCustomersUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: pageNo
+          in: query
+          description: pageNo
+          required: false
+          type: integer
+          default: 0
+          format: int32
+        - name: pageSize
+          in: query
+          description: pageSize
+          required: false
+          type: integer
+          default: 10
+          format: int32
+        - name: sortBy
+          in: query
+          description: sortBy
+          required: false
+          type: string
+          default: id
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    post:
+      tags:
+        - customer-controller
+      summary: Create a new customer
+      operationId: saveUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: customer
+          description: customer
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Customer'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+  /customers/{id}:
+    get:
+      tags:
+        - customer-controller
+      summary: Get customer by ID
+      operationId: findByIdUsingGET
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Customer'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    put:
+      tags:
+        - customer-controller
+      summary: Update a customer by ID
+      operationId: updateUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: customer
+          description: customer
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Customer'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      deprecated: false
+    delete:
+      tags:
+        - customer-controller
+      summary: Delete a customer by ID
+      operationId: deleteUsingDELETE
+      produces:
+        - '*/*'
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      deprecated: false
+definitions:
+  Customer:
+    type: object
+    properties:
+      emails:
+        type: array
+        items:
+          $ref: '#/definitions/CustomerEmail'
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+    title: Customer
+  CustomerEmail:
+    type: object
+    properties:
+      customer:
+        $ref: '#/definitions/Customer'
+      email:
+        type: string
+      id:
+        type: integer
+        format: int64
+    title: CustomerEmail
